@@ -1,4 +1,3 @@
-import pandas as pd
 
 
 def column_card(df: pd.DataFrame, col_type: str) -> pd.DataFrame:
