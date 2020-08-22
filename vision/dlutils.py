@@ -1,10 +1,14 @@
 
-all = ["show_batch", "AdaptiveConcatPool2d"]
+import mimetypes
+import os
+import torch.nn as nn
+import torchvision
+import torch
+import cv2
+from pathlib import Path
+import pandas as pd
 
-
-# Cell
-image_extensions = set(
-    k for k, v in mimetypes.types_map.items() if v.startswith('image/'))
+all = ["show_batch", "AdaptiveConcatPool2d", "get_files"]
 
 
 # Cell
@@ -17,7 +21,7 @@ def _get_files(p, fs, extensions=None):
 # Cell
 
 
-def get_files(path, extensions=None, recurse=True, folders=None, followlinks=True):
+def get_files(path, extensions=None, recurse=True, folders=[], followlinks=True):
     "Get all the files in `path` with optional `extensions`, optionally with `recurse`, only in `folders`, if specified."
     path = Path(path)
     folders = folders
@@ -52,7 +56,7 @@ def show_batch(batch_images: torch.Tensor):
 class AdaptiveConcatPool2d(nn.Module):
     "Layer that concats `AdaptiveAvgPool2d` and `AdaptiveMaxPool2d`.(from fastai)"
 
-    def __init__(self, sz: Optional[int] = None):
+    def __init__(self, sz: int = None):
         "Output will be 2*sz or 2 if sz is None"
         self.output_size = sz or 1
         self.ap = nn.AdaptiveAvgPool2d(self.output_size)
