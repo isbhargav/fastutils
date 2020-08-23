@@ -2,6 +2,7 @@
 import mimetypes
 import os
 import torch.nn as nn
+from torch.utils.data import Dataset
 import torchvision
 import torch
 import cv2
@@ -124,3 +125,22 @@ def display_image_grid(images_filepaths, true_labels=None, predicted_labels=[], 
         ax.ravel()[i].set_axis_off()
     plt.tight_layout()
     plt.show()
+
+
+def visualize(image):
+    """
+    Visualize Given an image (RGB image) : use imconjuction with read_img
+
+    """
+    plt.figure(figsize=(10, 10))
+    plt.axis('off')
+    plt.imshow(image)
+
+
+def read_img(file_path: Path):
+    """
+    Reads image using cv2.imread and converts it ot RGB
+    """
+    image = cv2.imread(file_path)
+    image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+    return image
