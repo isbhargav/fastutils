@@ -7,6 +7,7 @@ import torch
 import cv2
 from pathlib import Path
 import pandas as pd
+import matplotlib.pyplot as plt
 
 all = ["show_batch", "AdaptiveConcatPool2d", "get_files"]
 
@@ -98,3 +99,28 @@ class AdaptiveConcatPool2d(nn.Module):
 #             image = augmented['image']
 
 #         return image, label
+
+
+def display_image_grid(images_filepaths, true_labels=None, predicted_labels=[], cols=5):
+    """
+    Utility punction where given file paths, true labels, predicted labels it displays
+    them in fastai style
+    """
+    rows = len(images_filepaths) // cols
+    figure, ax = plt.subplots(nrows=rows, ncols=cols, figsize=(12, 6))
+    for i, image_filepath in enumerate(images_filepaths):
+        image = cv2.imread(image_filepath)
+        image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+
+        if true_labels is not None:
+            true_label = true_labels[i]
+        else:
+            true_label = os.path.normpath(image_filepath).split(os.sep)[-2]
+        predicted_label = predicted_labels[i] if predicted_labels else true_label
+
+        color = "green" if true_label == predicted_label else "red"
+        ax.ravel()[i].imshow(image)
+        ax.ravel()[i].set_title(predicted_label, color=color)
+        ax.ravel()[i].set_axis_off()
+    plt.tight_layout()
+    plt.show()
